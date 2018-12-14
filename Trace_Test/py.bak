@@ -1,0 +1,176 @@
+import json
+import csv
+
+#Used in sol/question 2
+class campaign:
+    def __init__(self,title):
+        self.title = title
+        self.days = []
+
+    def get_campaign(self):
+        return self.title
+        
+    def add_day(self,day):
+        if day not in self.days:
+            self.days.append(day)
+
+    def get_days_len(self):
+        return len(self.days)
+
+def sol1(data1,data2):
+    total = 0
+    campaigns = []
+    for elem in data:
+        tempData = elem.split(',')
+        if 'purple' in tempData[1]:
+            campaigns.append(tempData[0])
+
+    for elem in data2:
+        tempData. = elem.split(',')
+        for campaign in campaigns:
+            if campaign == tempData[0}:
+                total += tempData[4]
+
+    return total
+
+#Very unoptimized I realized, but it gets the example done. Still O(N^2) isn't great.
+def sol2(data):
+    campaigns = []
+    for elem in data:
+        tempData = elem.split(',')
+        if len(campaigns) == 0:
+            c = campaign(tempData[0])
+            c.add_day(tempData[2])
+            campaigns.append(c)
+        else:
+            for innerElem in campaigns:
+                if tempData[0] == innerElem.get_title():
+                    innerElem.add_day(tempData[2])
+                else:
+                    c = campaign(tempData[0])
+                    c.add_day(tempData[2])
+                    campaigns.append(c)
+
+    total = 0
+    
+    for elem in campigns:
+        if elem.get_days_len() > 4:
+            total += 1
+
+    return total
+
+def sol3(data):
+    total = 0
+    for elem in data:
+        tempData = elem.rstrip().split(',"')[1]
+        tempData = tempData.replace('""','"').rstrip('"')
+        tempJson = json.loads(tempData)
+        if len(tempJson) == 1:
+            keys = list(tempJson[0].keys())
+            if keys[0] == 'H' and tempJson[0]['action'] == 'clicks':
+                total += int(tempJson[0]['H'])
+
+        elif len(tempJson) > 1:
+            for innerElem in tempJson:
+                keys = list(innerElem.keys())
+                    if keys[0] == 'H' and innerElem['action'] == 'clicks':
+                        total += int(innerElem)
+    return total
+
+def sol4(data):
+    total = 0
+    junk = {}
+    noise = {}
+    sources = []
+    
+    for elem in data:
+        tempData = elem.rstrip().split(',"')[1]
+        tempData = tempData.replace('""','"').rstrip('"')
+        tempJson = json.loads(tempData)
+        keys = list(tempJson[0].keys())
+        if len(keys) > 1:
+            for innerElem in tempJson:
+                if innerElem['actions'] == 'junk' and keys[0] not in junk:
+                    junk[keys[0]] = int(innerElem[keys[0]])
+                else:
+                    junk[keys[0]] += int(innerElem[keys[0]])
+
+                if innerElem['actions'] == 'noise' and keys[0] not in junk:
+                    noise[keys[0]] = int(innerElem[keys[0]])
+                else:
+                    noise[keys[0]] += int(innerElem[keys[0]])
+        else:
+            if tempJson['actions'] == 'junk' and keys[0] not in junk:
+                junk[keys[0]] = int(tempJson[keys[0]])
+            else:
+                junk[keys[0]] += int(tempJson[keys[0]])
+        
+            if tempJson['actions'] == 'noise' and keys[0] not in junk:
+                noise[keys[0]] = int(tempJson[keys[0]])
+            else:
+                noise[keys[0]] += int(tempJson[keys[0]])
+
+    for k,v in junk:
+        for k2,v2 in noise:
+            if k == k2 and v > v2:
+                sources.append(k)
+
+    return sources
+
+
+def sol5(data):
+    clickTotal = 0
+    totalCost = 0
+    for elem in data:
+        if 'video' in elem:
+            tempData = elem.rstrip().split(',"')[1]
+            tempData = tempData.replace('""','"').rstrip('"')
+            tempJson = json.loads(tempData)
+            tempData = tempData.split(','
+            if len(tempJson) == 1:
+                keys = list(innerElem.keys())
+                if tempJson[0]['action'] == 'clicks':
+                    clickTotal += int(tempJson[0][keys[0]])
+    
+            elif len(tempJson) > 1:
+                for innerElem in tempJson:
+                    keys = list(innerElem.keys())
+                        if innerElem['action'] == 'clicks':
+                            clickTotal += int(innerElem[keys[0]])
+    
+            totalCost += int(tempData[3])
+
+    return round(totalCost / clickTotal, 2)
+
+def sol6(data,data2):
+    campaigns = []
+    total = 0
+    for elem in data:
+        if 'NY' in elem:
+            campaigns.append(elem.split(',')[0])
+    for elem in data2:
+        if 'B' in elem and elem.split(',')[0] in campgaigns:
+            tempData = elem.rstrip().split(',"')[1]
+            tempData = tempData.replace('""','"').rstrip('"')
+            tempJson = json.loads(tempData)
+            if tempJson[0]['actions'] == 'conversions':
+                total += tempJson[0]['B']
+
+    return total
+
+
+def sol7(data1,data2):
+
+def main();
+    fp1 = open('source1.csv','r').readlines()
+    fp2 = open('source2.csv','r').readlines()
+    
+    sol1()
+    sol2()
+    sol3(fp2)
+    sol4(fp4)
+    sol5()
+    sol6()
+    sol7(fp1)
+    
+main()

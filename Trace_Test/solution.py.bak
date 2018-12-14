@@ -1,0 +1,144 @@
+import json
+import csv
+
+
+def sol1(data1, data2):
+    total = 0
+    campaigns = []
+    for elem in data1:
+        tempData = elem.split(",")
+        if "purple" in tempData[1]:
+            campaigns.append(tempData[0])
+
+    for elem in data2:
+        tempData = elem.split(",")
+        for campaign in campaigns:
+            if campaign == tempData[0]:
+                total += int(tempData[3])
+
+    return total
+
+
+def sol2(data):
+    campaigns = {}
+    total = 0
+    for elem in data:
+        day_list = []
+        tempData = elem.split(",")
+        campaign = tempData[0]
+        date = tempData[2]
+        if campaign not in  campaigns:
+            day_list.append(date)
+            campaigns[campaign] = day_list
+        elif campaign in campaigns:
+            if date not in campaigns[campaign]:
+                campaigns[campaign].append(date)
+
+    for k,v in campaigns.items():
+        if len(v) > 4:
+            total += 1
+            
+    return total
+
+
+def sol3(data):
+    total = 0
+    for elem in data:
+        if 'ad_type' not in elem:
+            tempData = elem.rstrip().split(',"')[1]
+            tempData = tempData.replace('""', '"').rstrip('"')
+            tempJson = json.loads(tempData)
+            for innerElem in tempJson:
+                keys = list(innerElem.keys())
+                if keys[0] == "H" and innerElem["action"] == "clicks":
+                    total += int(innerElem[keys[0]])
+
+    return total
+
+
+def sol4(data):
+    junk = {}
+    noise = {}
+    sources = []
+
+    for elem in data:
+        if 'ad_type' not in elem:
+            tempData = elem.rstrip().split(',"')[1]
+            tempData = tempData.replace('""', '"').rstrip('"')
+            tempJson = json.loads(tempData)
+            for innerElem in tempJson:
+                keys = list(innerElem.keys())
+                if innerElem['action'] == "junk" and keys[0] not in junk:
+                    junk[keys[0]] = int(innerElem[keys[0]])
+                elif innerElem[keys[1]] == "junk" and keys[0] in junk:
+                    junk[keys[0]] += int(innerElem[keys[0]])
+                if innerElem['action'] == "noise" and keys[0] not in noise:
+                    noise[keys[0]] = int(innerElem[keys[0]])
+                elif innerElem[keys[1]] == "noise" and keys[0] in noise:
+                    noise[keys[0]] += int(innerElem[keys[0]])
+                    
+    for k, v in junk.items():
+        for k2, v2 in noise.items():
+            if k == k2 and v > v2:
+                sources.append(k)
+
+    return sources
+
+
+def sol5(data):
+    clickTotal = 0
+    totalCost = 0
+    for elem in data:
+        if 'ad_type' not in elem:
+            if "video" in elem:
+                tempData = elem.rstrip().split(',"')[1]
+                tempData = tempData.replace('""', '"').rstrip('"')
+                tempJson = json.loads(tempData)
+                for innerElem in tempJson:
+                    keys = list(innerElem.keys())
+                    if innerElem["action"] == "clicks":
+                        clickTotal += int(innerElem[keys[0]])
+    
+                totalCost += int(elem.split(',')[3])
+
+    return round(totalCost / clickTotal, 2)
+
+
+def sol6(data, data2):
+    campaigns = []
+    total = 0
+    for elem in data:
+        if "NY" in elem:
+            campaigns.append(elem.split(",")[0])
+
+    for elem in data2:
+        campaign = elem.split(",")[0]
+        if "B" in elem and campaign in campaigns:
+            tempData = elem.rstrip().split(',"')[1]
+            tempData = tempData.replace('""', '"').rstrip('"')
+            tempJson = json.loads(tempData)
+            for innerElem in tempJson:
+                keys = list(innerElem.keys())
+                if innerElem['action'] == "conversions" and keys[0] == 'B':
+                    total += innerElem["B"]
+
+    return total
+
+
+ def sol7(data1,data2):
+
+
+def main():
+    fp1 = open("source1.csv", "r").readlines()
+    fp2 = open("source2.csv", "r").readlines()
+
+    print(sol1(fp1,fp2))
+    print(sol2(fp2))
+    print(sol3(fp2))
+    print(sol4(fp2))
+    print(sol5(fp2))
+    print(sol6(fp1,fp2))
+    #sol7(fp1)
+
+
+main()
